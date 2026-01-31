@@ -1,0 +1,83 @@
+plugins {
+	// Compiling
+	id "java"
+	id "application"
+
+	// Versioning
+	id("io.github.kotlin-artisans.changesets") version "0.0.4"
+
+	// Formatting
+	id 'com.diffplug.spotless' version "8.2.1" // Code formatting
+	id 'io.freefair.lombok' version '9.2.0'
+
+	// Code Coverage
+	id 'jacoco'
+
+	// Testing
+	id 'com.adarshr.test-logger' version '4.0.0' // Test Logger
+	id 'info.solidsoft.pitest' version '1.19.0-rc.3' // Mutation Testing
+}
+
+group = 'com.xenosnowfox.podcaststudio'
+version = '0.0.0'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	// Jackson Data Modules
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.1'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.14.1'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.1'
+	implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.14.1'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1'
+
+	// Vendor Dependencies
+	implementation 'com.bugsnag:bugsnag:3.7.1'
+
+	// project lombok
+	compileOnly 'org.projectlombok:lombok:1.18.42'
+	annotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+	// Testing Dependencies
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.1'
+
+	// project lombok testing
+	testCompileOnly 'org.projectlombok:lombok:1.18.42'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+application {
+	mainClass = "com.xenosnowfox.podcaststudio.Application"
+}
+
+jacoco {
+	toolVersion = "0.8.12"
+}
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+compileJava {
+	dependsOn "spotlessApply"
+}
+
+spotless {
+	java {
+		importOrder()
+		removeUnusedImports()
+		palantirJavaFormat()
+		formatAnnotations()
+	}
+}

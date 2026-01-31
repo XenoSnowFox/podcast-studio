@@ -5,7 +5,10 @@
 *.log
 
 # IDE Folders
+.gradle
 .idea/
+build/
+deploy/
 
 # BlueJ files
 *.ctxt
